@@ -43,7 +43,7 @@ def make_api_client() -> SpectraAssureApiOperations:
 
     return api_client
 
-# REPORT
+# REPORT 
 def report_version(
     api_client: SpectraAssureApiOperations,
     project: str,
@@ -57,13 +57,17 @@ def report_version(
         version=version,
         report_type=report_type,
     )
-    if "cve" in report_type:
-        print("Report details:", report_data.text)
+    if ("cve") in report_type or ("uri") in report_type:
+        print("REPORT: ", report_data.text)
+        output_filename = package + "_" + report_type + ".csv"
+        with open(output_filename, 'w') as f:
+            print(report_data.text, file=f)
+        f.close()
         return report_data.text
     else:
         report_details = report_data.json()
         print(json.dumps(report_details, indent=2))
-        output_filename = package + "-" + report_type + ".json"
+        output_filename = package + "_" + report_type + ".json"
         with open(output_filename, 'w') as f:
             print(json.dumps(report_details, indent=2), file=f)
         f.close()
@@ -77,7 +81,7 @@ def x_main() -> None:
     parser.add_argument("-p", "--project", required=True, help="Project in Portal.")
     parser.add_argument("-k", "--package", required=True, help="Package.")
     parser.add_argument("-v", "--version", required=True, help="Version.")
-    parser.add_argument("-t", "--type", required=True, help="Report type. Must be one of: CycloneDX, rl-checks, rl-cve, rl-json, SARIF, SPDX.")
+    parser.add_argument("-t", "--type", required=True, help="Report type. Must be one of: CycloneDX, rl-checks, rl-cve, rl-json, rl-uri, SARIF, SPDX.")
 
     args = parser.parse_args()
     proj = args.project

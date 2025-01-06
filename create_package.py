@@ -61,11 +61,11 @@ def create_package(
     print("Create package", rr.status_code, rr.text)
 
 
-def x_main() -> None:
+def x_main() -> None: 
     api_client = make_api_client()
 
     parser = argparse.ArgumentParser(description="Provide --project, and --package, on the command line.")
-    parser.add_argument("-p", "--project", required=True, help="Project in Portal.")
+    parser.add_argument("-p", "--project", required=True, help="Project in Portal. Automatically created if it doesn't exist.")
     parser.add_argument("-k", "--package", required=True, help="Package to create.")
 
     args = parser.parse_args()
